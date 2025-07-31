@@ -19,12 +19,28 @@ import GlobalFooter from '@/components/GlobalFooter.vue'
 <style scoped>
 .basic-layout {
   background: none;
+  min-height: 100vh;
 }
 
 .main-content {
   max-width: 1200px;
   padding: 24px;
-  background: white;
+  background: #1e1e1e;
   margin: 16px auto 56px;
+  border-radius: 8px;
+  border: 1px solid #333;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+  position: relative;
+  overflow: hidden;
+}
+
+.main-content::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: linear-gradient(90deg, #1890ff, #00e676);
 }
 </style>
