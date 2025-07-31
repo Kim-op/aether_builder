@@ -1,9 +1,14 @@
 package com.aetherbuilder.nocode.service;
 
+import com.aetherbuilder.nocode.model.dto.user.UserQueryRequest;
+import com.aetherbuilder.nocode.model.dto.user.UserVO;
 import com.aetherbuilder.nocode.model.vo.user.LoginUserVO;
+import com.mybatisflex.core.query.QueryWrapper;
 import com.mybatisflex.core.service.IService;
 import com.aetherbuilder.nocode.model.entity.User;
 import jakarta.servlet.http.HttpServletRequest;
+
+import java.util.List;
 
 /**
  * 用户 服务层。
@@ -61,4 +66,20 @@ public interface UserService extends IService<User> {
      * @return 是否注销成功
      */
     boolean userLogout(HttpServletRequest request);
+
+    /**
+     * 获取脱敏的用户信息
+     *
+     * @return
+     */
+    UserVO getUserVO(User user);
+
+    /**
+     * 获取用户封装列表
+     * @param records
+     * @return
+     */
+    List<UserVO> getUserVOList(List<User> records);
+
+    QueryWrapper getQueryWrapper(UserQueryRequest userQueryRequest);
 }
