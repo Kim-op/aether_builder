@@ -1,20 +1,25 @@
 package com.aetherbuilder.nocode.service.impl;
 
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.StrUtil;
 import com.aetherbuilder.nocode.exception.BusinessException;
 import com.aetherbuilder.nocode.exception.ErrorCode;
 import com.aetherbuilder.nocode.model.enums.UserRoleEnum;
+import com.aetherbuilder.nocode.model.vo.user.LoginUserVO;
 import com.aetherbuilder.nocode.service.UserService;
 import com.mybatisflex.core.query.QueryWrapper;
 import com.mybatisflex.spring.service.impl.ServiceImpl;
 import com.aetherbuilder.nocode.model.entity.User;
 import com.aetherbuilder.nocode.mapper.UserMapper;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+
+import static com.aetherbuilder.nocode.constant.UserConstant.USER_LOGIN_STATE;
 
 /**
  * 用户 服务层实现。
@@ -71,11 +76,70 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         return user.getId();
     }
 
+    /**
+     * 获取加密后的密码
+     *
+     * @param userPassword <PASSWORD>
+     * @return 加密后的密码
+     */
     @Override
     public String getEncryptPassword(String userPassword) {
         final String slat = "cammy";
         return DigestUtils.md5DigestAsHex((slat + userPassword).getBytes());
     }
+
+    /**
+     * 用户登录
+     *
+     * @param userAccount   用户账户
+     * @param userPassword  <PASSWORD>
+     * @param request       请求
+     * @return 登录结果
+     */
+    @Override
+    public LoginUserVO userLogin(String userAccount, String userPassword, HttpServletRequest request) {
+        // 1.校验'
+        if (StrUtil.hasBlank(userAccount, userPassword)) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "参数为空");
+        }
+        if (userAccount.length() < 4) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "账号错误");
+        }
+        if (userPassword.length() < 8) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "密码错误");
+        }
+        // 2.加密
+        String encryptPassword = this.getEncryptPassword(userPassword);
+        // 查询用户是否存在
+        QueryWrapper queryWrapper = new QueryWrapper()
+                .eq(User::getUserAccount, userAccount)
+                .eq(User::getUserPassword, encryptPassword);
+        User user = this.mapper.selectOneByQuery(queryWrapper);
+        // 用户不存在
+        if (user == null) {
+            throw new BusinessException(ErrorCode.NOT_FOUND_ERROR, "用户不存在");
+        }
+        // 3.记录用户的登录态
+        request.getSession().setAttribute(USER_LOGIN_STATE, user);
+        // 4.获取脱敏后的用户信息
+        return this.getLoginUserVO(user);
+    }
+
+    /**
+     * 获取脱敏的已登录用户信息
+     *
+     * @return
+     */
+    @Override
+    public LoginUserVO getLoginUserVO(User user) {
+        if (user == null) {
+            return null;
+        }
+        LoginUserVO loginUserVO = new LoginUserVO();
+        BeanUtil.copyProperties(user, loginUserVO);
+        return loginUserVO;
+    }
+
 
     // 抽象形容词集合
     private static final List<String> ADJECTIVES = Arrays.asList(
