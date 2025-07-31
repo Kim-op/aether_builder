@@ -1,6 +1,12 @@
 package com.aetherbuilder.nocode.controller;
 
+import com.aetherbuilder.nocode.common.BaseResponse;
+import com.aetherbuilder.nocode.common.ResultUtils;
+import com.aetherbuilder.nocode.exception.ErrorCode;
+import com.aetherbuilder.nocode.exception.ThrowUtils;
+import com.aetherbuilder.nocode.model.dto.user.UserRegisterRequest;
 import com.mybatisflex.core.paginate.Page;
+import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -91,4 +97,21 @@ public class UserController {
         return userService.page(page);
     }
 
+
+    /**
+     * 用户注册
+     *
+     * @param userRegisterRequest 用户注册请求
+     * @return 注册结果
+     */
+    @PostMapping("register")
+    public BaseResponse<Long> userRegister(@RequestBody UserRegisterRequest userRegisterRequest) {
+        ThrowUtils.throwIf(userRegisterRequest == null, ErrorCode.PARAMS_ERROR);
+        String userAccount = userRegisterRequest.getUserAccount();
+        String userPassword = userRegisterRequest.getUserPassword();
+        String checkPassword = userRegisterRequest.getCheckPassword();
+        long result = userService.userRegister(userAccount, userPassword, checkPassword);
+        return ResultUtils.success(result);
+    }
 }
+
