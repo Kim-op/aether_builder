@@ -1,6 +1,10 @@
 spring:
   application:
     name: aether_builder-backend
+  profiles:
+    active: local
+  banner:
+    location: banner.txt
 server:
   port: 8123
   servlet:
