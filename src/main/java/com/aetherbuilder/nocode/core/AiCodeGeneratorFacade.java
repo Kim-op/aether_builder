@@ -150,18 +150,25 @@ public class AiCodeGeneratorFacade {
      * @param codeGenTypeEnum 生成类型
      */
     public Flux<String> generateAndSaveCodeStream(String userMessage, CodeGenTypeEnum codeGenTypeEnum) {
+        // 检查代码生成类型是否为空，若为空则抛出系统错误异常
         if (codeGenTypeEnum == null) {
             throw new BusinessException(ErrorCode.SYSTEM_ERROR, "生成类型为空");
         }
+
+        // 根据不同的代码生成类型，选择相应的处理逻辑
         return switch (codeGenTypeEnum) {
+            // 如果是HTML类型，则调用生成并保存HTML代码的方法
             case HTML -> generateAndSaveHtmlCodeStream(userMessage);
+
+            // 如果是多文件类型，则调用生成并保存多文件代码的方法
             case MULTI_FILE -> generateAndSaveMultiFileCodeStream(userMessage);
+
+            // 对于不支持的代码生成类型，构造错误信息并抛出系统错误异常
             default -> {
                 String errorMessage = "不支持的生成类型：" + codeGenTypeEnum.getValue();
                 throw new BusinessException(ErrorCode.SYSTEM_ERROR, errorMessage);
             }
         };
     }
-
-
 }
+
