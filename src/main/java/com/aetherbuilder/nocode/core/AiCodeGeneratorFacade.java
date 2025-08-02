@@ -4,6 +4,8 @@ import com.aetherbuilder.nocode.ai.AiCodeGeneratorService;
 import com.aetherbuilder.nocode.ai.model.HtmlCodeResult;
 import com.aetherbuilder.nocode.ai.model.MultiFileCodeResult;
 import com.aetherbuilder.nocode.ai.model.enums.CodeGenTypeEnum;
+import com.aetherbuilder.nocode.design.parser.CodeParserExecutor;
+import com.aetherbuilder.nocode.design.saver.CodeFileSaverExecutor;
 import com.aetherbuilder.nocode.exception.BusinessException;
 import com.aetherbuilder.nocode.exception.ErrorCode;
 import jakarta.annotation.Resource;
@@ -36,8 +38,14 @@ public class AiCodeGeneratorFacade {
             throw new BusinessException(ErrorCode.SYSTEM_ERROR, "生成类型为空");
         }
         return switch (codeGenTypeEnum) {
-            case HTML -> generateAndSaveHtmlCode(userMessage);
-            case MULTI_FILE -> generateAndSaveMultiFileCode(userMessage);
+            case HTML -> {
+                HtmlCodeResult result = aiCodeGeneratorService.generateHtmlCode(userMessage);
+                yield CodeFileSaverExecutor.executeSaver(result, CodeGenTypeEnum.HTML);
+            }
+            case MULTI_FILE -> {
+                MultiFileCodeResult result = aiCodeGeneratorService.generateMultiFileCode(userMessage);
+                yield CodeFileSaverExecutor.executeSaver(result, CodeGenTypeEnum.MULTI_FILE);
+            }
             default -> {
                 String errorMessage = "不支持的生成类型：" + codeGenTypeEnum.getValue();
                 throw new BusinessException(ErrorCode.SYSTEM_ERROR, errorMessage);
@@ -158,10 +166,16 @@ public class AiCodeGeneratorFacade {
         // 根据不同的代码生成类型，选择相应的处理逻辑
         return switch (codeGenTypeEnum) {
             // 如果是HTML类型，则调用生成并保存HTML代码的方法
-            case HTML -> generateAndSaveHtmlCodeStream(userMessage);
+            case HTML -> {
+                Flux<String> codeStream = aiCodeGeneratorService.generateMultiFileCodeStream(userMessage);
+                yield processCodeStream(codeStream, CodeGenTypeEnum.MULTI_FILE);
+            }
 
             // 如果是多文件类型，则调用生成并保存多文件代码的方法
-            case MULTI_FILE -> generateAndSaveMultiFileCodeStream(userMessage);
+            case MULTI_FILE -> {
+                Flux<String> codeStream = aiCodeGeneratorService.generateMultiFileCodeStream(userMessage);
+                yield processCodeStream(codeStream, CodeGenTypeEnum.MULTI_FILE);
+            }
 
             // 对于不支持的代码生成类型，构造错误信息并抛出系统错误异常
             default -> {
@@ -170,5 +184,35 @@ public class AiCodeGeneratorFacade {
             }
         };
     }
+
+    // todo:抽象出流式的处理方法
+
+    /**
+     * 通用流式代码处理方法
+     *
+     * @param codeStream  代码流
+     * @param codeGenType 代码生成类型
+     * @return 流式响应
+     */
+    private Flux<String> processCodeStream(Flux<String> codeStream, CodeGenTypeEnum codeGenType) {
+        StringBuilder codeBuilder = new StringBuilder();
+        return codeStream.doOnNext(chunk -> {
+            // 实时收集代码片段
+            codeBuilder.append(chunk);
+        }).doOnComplete(() -> {
+            // 流式返回完成后保存代码
+            try {
+                String completeCode = codeBuilder.toString();
+                // 使用执行器解析代码
+                Object parsedResult = CodeParserExecutor.executeParser(completeCode, codeGenType);
+                // 使用执行器保存代码
+                File savedDir = CodeFileSaverExecutor.executeSaver(parsedResult, codeGenType);
+                log.info("保存成功，路径为：" + savedDir.getAbsolutePath());
+            } catch (Exception e) {
+                log.error("保存失败: {}", e.getMessage());
+            }
+        });
+    }
+
 }
 
