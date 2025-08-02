@@ -103,6 +103,16 @@
             <artifactId>langchain4j-open-ai-spring-boot-starter</artifactId>
             <version>1.1.0-beta7</version>
         </dependency>
+        <!-- 引入 LangChain4J 的 Reactor 支持模块，用于与 Reactor 响应式编程库集成 -->
+        <dependency>
+            <!-- 依赖的组织或项目组标识，这里是 dev.langchain4j -->
+            <groupId>dev.langchain4j</groupId>
+            <!-- 依赖的具体模块名称，这里是 langchain4j-reactor -->
+            <artifactId>langchain4j-reactor</artifactId>
+            <!-- 依赖的版本号，当前使用的是 1.1.0 的第七个测试版（beta7） -->
+            <version>1.1.0-beta7</version>
+        </dependency>
+
     </dependencies>
 
     <build>
