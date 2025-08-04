@@ -8,7 +8,7 @@ import com.aetherbuilder.nocode.exception.ErrorCode;
 import com.aetherbuilder.nocode.model.dto.user.UserQueryRequest;
 import com.aetherbuilder.nocode.model.dto.user.UserVO;
 import com.aetherbuilder.nocode.model.enums.UserRoleEnum;
-import com.aetherbuilder.nocode.model.vo.user.LoginUserVO;
+import com.aetherbuilder.nocode.model.vo.LoginUserVO;
 import com.aetherbuilder.nocode.service.UserService;
 import com.mybatisflex.core.query.QueryWrapper;
 import com.mybatisflex.spring.service.impl.ServiceImpl;

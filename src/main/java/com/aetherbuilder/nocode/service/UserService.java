@@ -2,7 +2,7 @@ package com.aetherbuilder.nocode.service;
 
 import com.aetherbuilder.nocode.model.dto.user.UserQueryRequest;
 import com.aetherbuilder.nocode.model.dto.user.UserVO;
-import com.aetherbuilder.nocode.model.vo.user.LoginUserVO;
+import com.aetherbuilder.nocode.model.vo.LoginUserVO;
 import com.mybatisflex.core.query.QueryWrapper;
 import com.mybatisflex.core.service.IService;
 import com.aetherbuilder.nocode.model.entity.User;
