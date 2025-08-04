@@ -23,6 +23,7 @@ import java.io.File;
 public class AiCodeGeneratorFacade {
 
     private static final Logger log = LoggerFactory.getLogger(AiCodeGeneratorFacade.class);
+
     @Resource
     private AiCodeGeneratorService aiCodeGeneratorService;
 

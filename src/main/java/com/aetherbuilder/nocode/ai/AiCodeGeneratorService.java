@@ -2,7 +2,9 @@ package com.aetherbuilder.nocode.ai;
 
 import com.aetherbuilder.nocode.ai.model.HtmlCodeResult;
 import com.aetherbuilder.nocode.ai.model.MultiFileCodeResult;
+import dev.langchain4j.service.MemoryId;
 import dev.langchain4j.service.SystemMessage;
+import dev.langchain4j.service.UserMessage;
 import reactor.core.publisher.Flux;
 
 public interface AiCodeGeneratorService {
