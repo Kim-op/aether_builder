@@ -18,7 +18,6 @@ import com.mybatisflex.spring.service.impl.ServiceImpl;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import reactor.core.publisher.Flux;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,16 +38,6 @@ public class AppServiceImpl extends ServiceImpl<AppMapper, App> implements AppSe
     @Resource
     private AiCodeGeneratorFacade aiCodeGeneratorFacade;
 
-
-    @Override
-    public Flux<String> chatToGenCode(Long appId, String message, User loginUser) {
-        return null;
-    }
-
-    @Override
-    public String deployApp(Long appId, User loginUser) {
-        return "";
-    }
 
     @Override
     public AppVO getAppVO(App app) {

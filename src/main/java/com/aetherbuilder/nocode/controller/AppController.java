@@ -3,7 +3,6 @@ package com.aetherbuilder.nocode.controller;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.StrUtil;
-import cn.hutool.json.JSONUtil;
 import com.aetherbuilder.nocode.ai.model.enums.CodeGenTypeEnum;
 import com.aetherbuilder.nocode.annotation.AuthCheck;
 import com.aetherbuilder.nocode.common.BaseResponse;
@@ -14,7 +13,10 @@ import com.aetherbuilder.nocode.constant.UserConstant;
 import com.aetherbuilder.nocode.exception.BusinessException;
 import com.aetherbuilder.nocode.exception.ErrorCode;
 import com.aetherbuilder.nocode.exception.ThrowUtils;
-import com.aetherbuilder.nocode.model.dto.app.*;
+import com.aetherbuilder.nocode.model.dto.app.AppAddRequest;
+import com.aetherbuilder.nocode.model.dto.app.AppAdminUpdateRequest;
+import com.aetherbuilder.nocode.model.dto.app.AppQueryRequest;
+import com.aetherbuilder.nocode.model.dto.app.AppUpdateRequest;
 import com.aetherbuilder.nocode.model.entity.App;
 import com.aetherbuilder.nocode.model.entity.User;
 import com.aetherbuilder.nocode.model.vo.AppVO;
@@ -24,15 +26,10 @@ import com.mybatisflex.core.paginate.Page;
 import com.mybatisflex.core.query.QueryWrapper;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
-import org.springframework.http.MediaType;
-import org.springframework.http.codec.ServerSentEvent;
 import org.springframework.web.bind.annotation.*;
-import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
 
 /**
  * 应用控制器
