@@ -14,10 +14,7 @@ import com.aetherbuilder.nocode.constant.UserConstant;
 import com.aetherbuilder.nocode.exception.BusinessException;
 import com.aetherbuilder.nocode.exception.ErrorCode;
 import com.aetherbuilder.nocode.exception.ThrowUtils;
-import com.aetherbuilder.nocode.model.dto.app.AppAddRequest;
-import com.aetherbuilder.nocode.model.dto.app.AppAdminUpdateRequest;
-import com.aetherbuilder.nocode.model.dto.app.AppQueryRequest;
-import com.aetherbuilder.nocode.model.dto.app.AppUpdateRequest;
+import com.aetherbuilder.nocode.model.dto.app.*;
 import com.aetherbuilder.nocode.model.entity.App;
 import com.aetherbuilder.nocode.model.entity.User;
 import com.aetherbuilder.nocode.model.vo.AppVO;
@@ -322,6 +319,25 @@ public class AppController {
                                 .data("")
                                 .build()
                 ));
+    }
+
+    /**
+     * 应用部署
+     *
+     * @param appDeployRequest 部署请求
+     * @param request          请求
+     * @return 部署 URL
+     */
+    @PostMapping("/deploy")
+    public BaseResponse<String> deployApp(@RequestBody AppDeployRequest appDeployRequest, HttpServletRequest request) {
+        ThrowUtils.throwIf(appDeployRequest == null, ErrorCode.PARAMS_ERROR);
+        Long appId = appDeployRequest.getAppId();
+        ThrowUtils.throwIf(appId == null || appId <= 0, ErrorCode.PARAMS_ERROR, "应用 ID 不能为空");
+        // 获取当前登录用户
+        User loginUser = userService.getLoginUser(request);
+        // 调用服务部署应用
+        String deployUrl = appService.deployApp(appId, loginUser);
+        return ResultUtils.success(deployUrl);
     }
 
 }
