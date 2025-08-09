@@ -1,10 +1,10 @@
 package com.aetherbuilder.nocode.ai;
 
 import com.aetherbuilder.nocode.ai.model.enums.CodeGenTypeEnum;
+import com.aetherbuilder.nocode.ai.tools.*;
 import com.aetherbuilder.nocode.exception.BusinessException;
 import com.aetherbuilder.nocode.exception.ErrorCode;
 import com.aetherbuilder.nocode.service.ChatHistoryService;
-import com.aetherbuilder.nocode.ai.tools.FileWriteTool;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import dev.langchain4j.community.store.memory.chat.redis.RedisChatMemoryStore;
@@ -107,6 +107,9 @@ public class AiCodeGeneratorServiceFactory {
 //                .build();
 //    }
 
+    @Resource
+    private ToolManager toolManager;
+
     /**
      * 创建新的 AI 服务实例
      */
@@ -126,7 +129,7 @@ public class AiCodeGeneratorServiceFactory {
             case VUE_PROJECT -> AiServices.builder(AiCodeGeneratorService.class)
                     .streamingChatModel(reasoningStreamingChatModel)
                     .chatMemoryProvider(memoryId -> chatMemory)
-                    .tools(new FileWriteTool())
+                    .tools(toolManager.getAllTools())
                     .hallucinatedToolNameStrategy(toolExecutionRequest -> ToolExecutionResultMessage.from(
                             toolExecutionRequest, "Error: there is no tool called " + toolExecutionRequest.name()
                     ))

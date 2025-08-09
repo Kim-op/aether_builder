@@ -4,7 +4,10 @@ import cn.hutool.core.util.RuntimeUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -123,12 +126,18 @@ public class VueProjectBuilder {
      * @return 是否执行成功
      */
     private boolean executeCommand(File workingDir, String command, int timeoutSeconds) {
+        Process process = null;
+        BufferedReader errorReader = null;
         try {
             log.info("在目录 {} 中执行命令: {}", workingDir.getAbsolutePath(), command);
-            Process process = RuntimeUtil.exec(
+            process = RuntimeUtil.exec(
                     null,
                     workingDir,
                     command.split("\\s+") // 命令分割为数组
+            );
+            // 捕获错误流（关键：获取npm等命令的错误输出）
+            errorReader = new BufferedReader(
+                    new InputStreamReader(process.getErrorStream(), StandardCharsets.UTF_8)
             );
             // 等待进程完成，设置超时
             boolean finished = process.waitFor(timeoutSeconds, TimeUnit.SECONDS);
@@ -137,6 +146,20 @@ public class VueProjectBuilder {
                 process.destroyForcibly();
                 return false;
             }
+
+            // 读取错误流内容（无论退出码是否为0，都可能有错误输出）
+            StringBuilder errorMsg = new StringBuilder();
+            String line;
+            while ((line = errorReader.readLine()) != null) {
+                errorMsg.append(line).append("\n");
+            }
+
+            // 检查错误输出并记录
+            if (!errorMsg.isEmpty()) {
+                // 区分警告和错误（根据实际场景调整）
+                log.warn("命令执行有输出信息:\n{}", errorMsg.toString().trim());
+            }
+
             int exitCode = process.exitValue();
             if (exitCode == 0) {
                 log.info("命令执行成功: {}", command);
@@ -148,6 +171,18 @@ public class VueProjectBuilder {
         } catch (Exception e) {
             log.error("执行命令失败: {}, 错误信息: {}", command, e.getMessage());
             return false;
+        } finally {
+            // 关闭资源
+            if (errorReader != null) {
+                try {
+                    errorReader.close();
+                } catch (Exception e) {
+                    log.error("关闭错误流失败", e);
+                }
+            }
+            if (process != null) {
+                process.destroy(); // 确保进程被销毁
+            }
         }
     }
 
