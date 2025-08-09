@@ -24,6 +24,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.aetherbuilder.nocode.constant.CosConstant.COS_USER_AVATAR;
 import static com.aetherbuilder.nocode.constant.UserConstant.USER_LOGIN_STATE;
 
 /**
@@ -72,7 +73,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         user.setUserAccount(userAccount);
         user.setUserPassword(encryptPassword);
         user.setUserName(this.generateAbstractUsername());
-        user.setUserAvatar("https://cammy-1327275726.cos.ap-guangzhou.myqcloud.com/logo.png");
+        user.setUserAvatar(COS_USER_AVATAR);
         user.setUserRole(UserRoleEnum.USER.getValue());
         boolean result = this.save(user);
         if (!result) {

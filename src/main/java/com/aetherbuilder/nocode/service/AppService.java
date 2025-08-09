@@ -1,5 +1,6 @@
 package com.aetherbuilder.nocode.service;
 
+import com.aetherbuilder.nocode.model.dto.app.AppAddRequest;
 import com.aetherbuilder.nocode.model.dto.app.AppQueryRequest;
 import com.aetherbuilder.nocode.model.entity.App;
 import com.aetherbuilder.nocode.model.entity.User;
@@ -63,4 +64,12 @@ public interface AppService extends IService<App> {
      * @param appUrl 应用访问URL
      */
     void generateAppScreenshotAsync(Long appId, String appUrl);
+
+    /**
+     * 创建应用
+     * @param appAddRequest
+     * @param loginUser
+     * @return
+     */
+    Long createApp(AppAddRequest appAddRequest, User loginUser);
 }
