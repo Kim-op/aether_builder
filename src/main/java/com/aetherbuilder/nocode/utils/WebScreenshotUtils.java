@@ -28,6 +28,10 @@ public class WebScreenshotUtils {
 
     // 全局静态初始化，避免重复初始化驱动程序：
     static {
+        System.setProperty("wdm.timeout", "300");
+        System.setProperty("wdm.retryCount", "3");
+        System.setProperty("wdm.chromeDownloadUrl", "https://npmmirror.com/mirrors/chromedriver/");
+
         final int DEFAULT_WIDTH = 1600;
         final int DEFAULT_HEIGHT = 900;
         webDriver = initChromeDriver(DEFAULT_WIDTH, DEFAULT_HEIGHT);
@@ -83,7 +87,6 @@ public class WebScreenshotUtils {
             return null;
         }
     }
-
 
     /**
      * 初始化 Chrome 浏览器驱动
