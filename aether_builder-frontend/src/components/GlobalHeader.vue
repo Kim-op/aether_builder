@@ -6,18 +6,13 @@
         <RouterLink to="/">
           <div class="header-left">
             <img class="logo" src="@/assets/logo.png" alt="Logo" />
-            <h1 class="site-title">苏苏应用生成</h1>
+            <h1 class="site-title">构建者苏苏</h1>
           </div>
         </RouterLink>
       </a-col>
       <!-- 中间：导航菜单 -->
       <a-col flex="auto">
-        <a-menu
-          v-model:selectedKeys="selectedKeys"
-          mode="horizontal"
-          :items="menuItems"
-          @click="handleMenuClick"
-        />
+        <a-menu v-model:selectedKeys="selectedKeys" mode="horizontal" :items="menuItems" @click="handleMenuClick" />
       </a-col>
       <!-- 右侧：用户操作区域 -->
       <a-col>
@@ -84,8 +79,8 @@ const originItems = [
   },
   {
     key: 'others',
-    label: h('a', { href: 'https://www.codefather.cn', target: '_blank' }, '编程导航'),
-    title: '编程导航',
+    label: h('a', { href: 'https://github.com/Kim-op/aether_builder', target: '_blank' }, 'GitHub'),
+    title: 'GitHub',
   },
 ]
 

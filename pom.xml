@@ -105,12 +105,33 @@
         </dependency>
         <!-- 引入 LangChain4J 的 Reactor 支持模块，用于与 Reactor 响应式编程库集成 -->
         <dependency>
-            <!-- 依赖的组织或项目组标识，这里是 dev.langchain4j -->
             <groupId>dev.langchain4j</groupId>
-            <!-- 依赖的具体模块名称，这里是 langchain4j-reactor -->
             <artifactId>langchain4j-reactor</artifactId>
-            <!-- 依赖的版本号，当前使用的是 1.1.0 的第七个测试版（beta7） -->
             <version>1.1.0-beta7</version>
+        </dependency>
+        <!--
+          引入 LangChain4J 社区版的 Redis Spring Boot Starter 依赖，
+          用于在 Spring Boot 项目中集成 LangChain4J 与 Redis 的功能，
+          例如缓存、对话状态管理等。版本号为 1.1.0-beta7（测试版）。
+        -->
+        <dependency>
+            <groupId>dev.langchain4j</groupId>                  <!-- 依赖的组织或项目组标识 -->
+            <artifactId>langchain4j-community-redis-spring-boot-starter</artifactId> <!-- 具体依赖的模块或组件名称 -->
+            <version>1.1.0-beta7</version>                       <!-- 该依赖的版本号，当前为测试版本 -->
+        </dependency>
+        <!--
+            引入 Caffeine 缓存库，这是一个高性能、近似最优的本地缓存实现
+            groupId：com.github.ben-manes.caffeine - 该库由开发者 ben-manes 在 GitHub 上维护
+            artifactId：caffeine - Caffeine 缓存核心库，未指定版本号，通常需要在父 POM 或 dependencyManagement 中定义版本
+        -->
+        <dependency>
+            <groupId>com.github.ben-manes.caffeine</groupId>
+            <artifactId>caffeine</artifactId>
+        </dependency>
+        <!-- Spring Session + Redis -->
+        <dependency>
+            <groupId>org.springframework.session</groupId>
+            <artifactId>spring-session-data-redis</artifactId>
         </dependency>
 
     </dependencies>

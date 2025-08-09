@@ -2,13 +2,8 @@
   <a-layout-footer class="footer">
     <div class="footer-content">
       <p class="copyright">
-        <a
-          href="https://www.codefather.cn"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="author-link"
-        >
-          编程导航原创项目 by 程序员苏苏
+        <a href="https://github.com/Kim-op/aether_builder" target="_blank" rel="noopener noreferrer" class="author-link">
+          GitHub by Cammy
         </a>
       </p>
     </div>

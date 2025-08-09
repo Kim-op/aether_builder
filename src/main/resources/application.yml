@@ -11,9 +11,12 @@ spring:
   banner:
     location: banner.txt
 server:
-  port: 8123
+  port: 8956
   servlet:
     context-path: /api
+    session:
+      cookie:
+        max-age: 2592000
 # springdoc-openapi
 springdoc:
   group-configs:
