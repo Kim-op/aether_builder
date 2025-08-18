@@ -133,6 +133,12 @@ declare namespace API {
     lastCreateTime?: string
   }
 
+  type chatToGenCodeParams = {
+    appId: number
+    message: string
+    agent?: boolean
+  }
+
   type DeleteRequest = {
     id?: number
   }
@@ -245,6 +251,8 @@ declare namespace API {
   type removeParams = {
     id: number
   }
+
+  type ServerSentEventString = true
 
   type serveStaticResourceParams = {
     deployKey: string

@@ -8,6 +8,7 @@ import org.springframework.cache.annotation.EnableCaching;
 
 @MapperScan("com.aetherbuilder.nocode.mapper")
 @EnableCaching
+@SpringBootApplication(exclude = {RedisEmbeddingStoreAutoConfiguration.class})
 public class AetherbuilderApplication {
 
     public static void main(String[] args) {

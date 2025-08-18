@@ -15,7 +15,13 @@
           </template>
           应用详情
         </a-button>
-        <a-button type="primary" ghost @click="downloadCode" :loading="downloading" :disabled="!isOwner">
+        <a-button
+            type="primary"
+            ghost
+            @click="downloadCode"
+            :loading="downloading"
+            :disabled="!isOwner"
+        >
           <template #icon>
             <DownloadOutlined />
           </template>
@@ -65,8 +71,13 @@
         </div>
 
         <!-- 选中元素信息展示 -->
-        <a-alert v-if="selectedElementInfo" class="selected-element-alert" type="info" closable
-          @close="clearSelectedElement">
+        <a-alert
+            v-if="selectedElementInfo"
+            class="selected-element-alert"
+            type="info"
+            closable
+            @close="clearSelectedElement"
+        >
           <template #message>
             <div class="selected-element-info">
               <div class="element-header">
@@ -101,13 +112,31 @@
         <div class="input-container">
           <div class="input-wrapper">
             <a-tooltip v-if="!isOwner" title="无法在别人的作品下对话哦~" placement="top">
-              <a-textarea v-model:value="userInput" :placeholder="getInputPlaceholder()" :rows="4" :maxlength="1000"
-                @keydown.enter.prevent="sendMessage" :disabled="isGenerating || !isOwner" />
+              <a-textarea
+                  v-model:value="userInput"
+                  :placeholder="getInputPlaceholder()"
+                  :rows="4"
+                  :maxlength="1000"
+                  @keydown.enter.prevent="sendMessage"
+                  :disabled="isGenerating || !isOwner"
+              />
             </a-tooltip>
-            <a-textarea v-else v-model:value="userInput" :placeholder="getInputPlaceholder()" :rows="4"
-              :maxlength="1000" @keydown.enter.prevent="sendMessage" :disabled="isGenerating" />
+            <a-textarea
+                v-else
+                v-model:value="userInput"
+                :placeholder="getInputPlaceholder()"
+                :rows="4"
+                :maxlength="1000"
+                @keydown.enter.prevent="sendMessage"
+                :disabled="isGenerating"
+            />
             <div class="input-actions">
-              <a-button type="primary" @click="sendMessage" :loading="isGenerating" :disabled="!isOwner">
+              <a-button
+                  type="primary"
+                  @click="sendMessage"
+                  :loading="isGenerating"
+                  :disabled="!isOwner"
+              >
                 <template #icon>
                   <SendOutlined />
                 </template>
@@ -121,8 +150,14 @@
         <div class="preview-header">
           <h3>生成后的网页展示</h3>
           <div class="preview-actions">
-            <a-button v-if="isOwner && previewUrl" type="link" :danger="isEditMode" @click="toggleEditMode"
-              :class="{ 'edit-mode-active': isEditMode }" style="padding: 0; height: auto; margin-right: 12px">
+            <a-button
+                v-if="isOwner && previewUrl"
+                type="link"
+                :danger="isEditMode"
+                @click="toggleEditMode"
+                :class="{ 'edit-mode-active': isEditMode }"
+                style="padding: 0; height: auto; margin-right: 12px"
+            >
               <template #icon>
                 <EditOutlined />
               </template>
@@ -145,17 +180,32 @@
             <a-spin size="large" />
             <p>正在生成网站...</p>
           </div>
-          <iframe v-else :src="previewUrl" class="preview-iframe" frameborder="0" @load="onIframeLoad"></iframe>
+          <iframe
+              v-else
+              :src="previewUrl"
+              class="preview-iframe"
+              frameborder="0"
+              @load="onIframeLoad"
+          ></iframe>
         </div>
       </div>
     </div>
 
     <!-- 应用详情弹窗 -->
-    <AppDetailModal v-model:open="appDetailVisible" :app="appInfo" :show-actions="isOwner || isAdmin" @edit="editApp"
-      @delete="deleteApp" />
+    <AppDetailModal
+        v-model:open="appDetailVisible"
+        :app="appInfo"
+        :show-actions="isOwner || isAdmin"
+        @edit="editApp"
+        @delete="deleteApp"
+    />
 
     <!-- 部署成功弹窗 -->
-    <DeploySuccessModal v-model:open="deployModalVisible" :deploy-url="deployUrl" @open-site="openDeployedSite" />
+    <DeploySuccessModal
+        v-model:open="deployModalVisible"
+        :deploy-url="deployUrl"
+        @open-site="openDeployedSite"
+    />
   </div>
 </template>
 
@@ -273,12 +323,12 @@ const loadChatHistory = async (isLoadMore = false) => {
       if (chatHistories.length > 0) {
         // 将对话历史转换为消息格式，并按时间正序排列（老消息在前）
         const historyMessages: Message[] = chatHistories
-          .map((chat) => ({
-            type: (chat.messageType === 'user' ? 'user' : 'ai') as 'user' | 'ai',
-            content: chat.message || '',
-            createTime: chat.createTime,
-          }))
-          .reverse() // 反转数组，让老消息在前
+            .map((chat) => ({
+              type: (chat.messageType === 'user' ? 'user' : 'ai') as 'user' | 'ai',
+              content: chat.message || '',
+              createTime: chat.createTime,
+            }))
+            .reverse() // 反转数组，让老消息在前
         if (isLoadMore) {
           // 加载更多时，将历史消息添加到开头
           messages.value.unshift(...historyMessages)
@@ -333,10 +383,10 @@ const fetchAppInfo = async () => {
       // 检查是否需要自动发送初始提示词
       // 只有在是自己的应用且没有对话历史时才自动发送
       if (
-        appInfo.value.initPrompt &&
-        isOwner.value &&
-        messages.value.length === 0 &&
-        historyLoaded.value
+          appInfo.value.initPrompt &&
+          isOwner.value &&
+          messages.value.length === 0 &&
+          historyLoaded.value
       ) {
         await sendInitialMessage(appInfo.value.initPrompt)
       }
@@ -438,7 +488,6 @@ const generateCode = async (userMessage: string, aiMessageIndex: number) => {
     const params = new URLSearchParams({
       appId: appId.value || '',
       message: userMessage,
-      agent: "true",
     })
 
     const url = `${baseURL}/app/chat/gen/code?${params}`
@@ -472,9 +521,6 @@ const generateCode = async (userMessage: string, aiMessageIndex: number) => {
       }
     }
 
-    // 预览延迟时间(毫秒)
-    const PREVIEW_DELAY_MS = 15000
-
     // 处理done事件
     eventSource.addEventListener('done', function () {
       if (streamCompleted) return
@@ -483,15 +529,34 @@ const generateCode = async (userMessage: string, aiMessageIndex: number) => {
       isGenerating.value = false
       eventSource?.close()
 
-      // 显示等待提示
-      message.info(`后端构建已完成，将在${PREVIEW_DELAY_MS / 1000}秒后更新预览...`)
+      // 延迟更新预览，确保后端已完成处理
+      setTimeout(async () => {
+        await fetchAppInfo()
+        updatePreview()
+      }, 1000)
+    })
 
-      // 延迟更新预览，确保后端已完全处理完毕
-      setTimeout(() => {
-        fetchAppInfo().then(() => {
-          updatePreview()
-        })
-      }, PREVIEW_DELAY_MS)
+    // 处理business-error事件（后端限流等错误）
+    eventSource.addEventListener('business-error', function (event: MessageEvent) {
+      if (streamCompleted) return
+
+      try {
+        const errorData = JSON.parse(event.data)
+        console.error('SSE业务错误事件:', errorData)
+
+        // 显示具体的错误信息
+        const errorMessage = errorData.message || '生成过程中出现错误'
+        messages.value[aiMessageIndex].content = `❌ ${errorMessage}`
+        messages.value[aiMessageIndex].loading = false
+        message.error(errorMessage)
+
+        streamCompleted = true
+        isGenerating.value = false
+        eventSource?.close()
+      } catch (parseError) {
+        console.error('解析错误事件失败:', parseError, '原始数据:', event.data)
+        handleError(new Error('服务器返回错误'), aiMessageIndex)
+      }
     })
 
     // 处理错误
@@ -503,10 +568,10 @@ const generateCode = async (userMessage: string, aiMessageIndex: number) => {
         isGenerating.value = false
         eventSource?.close()
 
-        // 立即更新预览，不延迟
-        fetchAppInfo().then(() => {
+        setTimeout(async () => {
+          await fetchAppInfo()
           updatePreview()
-        })
+        }, 1000)
       } else {
         handleError(new Error('SSE连接错误'), aiMessageIndex)
       }
@@ -530,17 +595,9 @@ const handleError = (error: unknown, aiMessageIndex: number) => {
 const updatePreview = () => {
   if (appId.value) {
     const codeGenType = appInfo.value?.codeGenType || CodeGenTypeEnum.HTML
-    // 添加时间戳参数确保浏览器获取最新内容
-    const timestamp = new Date().getTime()
-    const newPreviewUrl = `${getStaticPreviewUrl(codeGenType, appId.value)}?t=${timestamp}`
-
-    console.log('更新预览URL:', newPreviewUrl)
-
-    // 直接更新previewUrl，Vue的响应式会自动处理iframe的src变化
+    const newPreviewUrl = getStaticPreviewUrl(codeGenType, appId.value)
     previewUrl.value = newPreviewUrl
     previewReady.value = true
-  } else {
-    console.warn('appId不存在，无法更新预览')
   }
 }
 
