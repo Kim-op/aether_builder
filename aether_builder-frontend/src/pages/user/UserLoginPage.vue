@@ -8,11 +8,11 @@
       <div class="brand-logo">
         <div class="logo-container">
           <!-- 这里可以替换为您指定的头像路径 -->
-          <img :src="avatarPath" alt="代码构建者苏苏Logo" class="logo-image" />
+          <img :src="avatarPath" alt="构建者苏苏Logo" class="logo-image" />
         </div>
       </div>
 
-      <h2 class="title">代码构建者苏苏 - 用户登录</h2>
+      <h2 class="title">构建者苏苏 - 用户登录</h2>
       <div class="desc">不写一行代码，生成完整应用</div>
 
       <a-form :model="formState" name="basic" autocomplete="off" @finish="handleSubmit" class="login-form">
@@ -44,7 +44,7 @@
 
     <!-- 页脚信息 -->
     <div class="page-footer">
-      <p>© 2023 代码构建者苏苏. 保留所有权利</p>
+      <p>© 2023 构建者苏苏. 保留所有权利</p>
     </div>
   </div>
 </template>

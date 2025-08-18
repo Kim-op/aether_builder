@@ -8,7 +8,7 @@
           GitHub by Cammy
         </a>
       </p>
-      <p class="rights">© 2025 代码构建者苏苏. 保留所有权利</p>
+      <p class="rights">© 2025 构建者苏苏. 保留所有权利</p>
     </div>
   </a-layout-footer>
 </template>
