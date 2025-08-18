@@ -41,6 +41,7 @@ public class RoutingAiModelConfig {
                 .temperature(temperature)
                 .logRequests(logRequests)
                 .logResponses(logResponses)
+                .maxRetries(3)
                 .build();
     }
 }
