@@ -18,6 +18,8 @@ import com.aetherbuilder.nocode.model.dto.app.*;
 import com.aetherbuilder.nocode.model.entity.App;
 import com.aetherbuilder.nocode.model.entity.User;
 import com.aetherbuilder.nocode.model.vo.AppVO;
+import com.aetherbuilder.nocode.ratelimit.annotation.RateLimit;
+import com.aetherbuilder.nocode.ratelimit.enums.RateLimitType;
 import com.aetherbuilder.nocode.service.AppService;
 import com.aetherbuilder.nocode.service.ProjectDownloadService;
 import com.aetherbuilder.nocode.service.UserService;
@@ -289,6 +291,7 @@ public class AppController {
      * @return 生成结果流
      */
     @GetMapping(value = "/chat/gen/code", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    @RateLimit(limitType = RateLimitType.USER, rate = 5, rateInterval = 60, message = "AI 对话请求过于频繁，请稍后再试")
     public Flux<ServerSentEvent<String>> chatToGenCode(@RequestParam Long appId,
                                                        @RequestParam String message,
                                                        @RequestParam(defaultValue = "false") boolean agent,
