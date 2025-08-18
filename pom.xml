@@ -173,6 +173,18 @@
             <artifactId>redisson</artifactId>
             <version>3.50.0</version>
         </dependency>
+
+        <!-- Spring Boot Actuator 依赖：提供应用监控和管理端点 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+        <!-- Micrometer Prometheus 注册表：将监控指标导出为Prometheus格式 -->
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-registry-prometheus</artifactId>
+        </dependency>
+
     </dependencies>
 
     <build>

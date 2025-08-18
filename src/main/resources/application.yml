@@ -28,3 +28,17 @@ knife4j:
   enable: true
   setting:
     language: zh_cn
+#  应用程序管理端点配置
+management:
+  # 端点配置
+  endpoints:
+    # Web访问端点配置
+    web:
+      # 暴露的端点列表
+      exposure:
+        include: health,info,prometheus  # 包含健康检查、基本信息和Prometheus监控端点
+  # 单个端点详细配置
+  endpoint:
+    # 健康检查端点配置
+    health:
+      show-details: always  # 始终显示健康检查的详细信息

@@ -24,6 +24,8 @@ import com.aetherbuilder.nocode.model.entity.App;
 import com.aetherbuilder.nocode.model.entity.User;
 import com.aetherbuilder.nocode.model.enums.ChatHistoryMessageTypeEnum;
 import com.aetherbuilder.nocode.model.vo.AppVO;
+import com.aetherbuilder.nocode.monitor.MonitorContext;
+import com.aetherbuilder.nocode.monitor.MonitorContextHolder;
 import com.aetherbuilder.nocode.service.AppService;
 import com.aetherbuilder.nocode.service.ChatHistoryService;
 import com.aetherbuilder.nocode.service.ScreenshotService;
@@ -137,7 +139,7 @@ public class AppServiceImpl extends ServiceImpl<AppMapper, App> implements AppSe
      * @return
      */
     @Override
-    public Flux<String> chatToGenCode(Long appId, String message, User loginUser, boolean agent) {
+    public Flux<String> chatToGenCode(Long appId, String message, User loginUser/*, boolean agent*/) {
         // 1.参数校验
         ThrowUtils.throwIf(null == appId || appId <= 0, ErrorCode.PARAMS_ERROR, "应用ID为空");
         ThrowUtils.throwIf(StrUtil.isBlank(message), ErrorCode.PARAMS_ERROR, "消息为空");
@@ -160,16 +162,23 @@ public class AppServiceImpl extends ServiceImpl<AppMapper, App> implements AppSe
         // 6.调用AI代码生成器
 //        Flux<String> contentFlux = aiCodeGeneratorFacade.generateAndSaveCodeStream(message, codeGenTypeEnum, appId);
 //        Flux<String> codeStream = aiCodeGeneratorFacade.generateAndSaveCodeStream(message, codeGenTypeEnum, appId);
-        // 6. 根据 agent 参数选择生成方式
-        Flux<String> codeStream;
-        if (agent) {
-            // Agent 模式：使用工作流生成代码
-            codeStream = new CodeGenWorkflow().executeWorkflowWithFlux(message, appId);
-        } else {
-            // 传统模式：调用 AI 生成代码（流式）
-            codeStream = aiCodeGeneratorFacade.generateAndSaveCodeStream(message, codeGenTypeEnum, appId);
-        }
-        // 7.收集AI响应内容并在完成后记录到对话历史
+        // 6. 设置监控上下文（用户 ID 和应用 ID）
+        MonitorContext monitorContext = MonitorContext.builder()
+                .userId(loginUser.getId().toString())
+                .appId(appId.toString())
+                .build();
+        MonitorContextHolder.setContext(monitorContext);
+        // 7. 根据 agent 参数选择生成方式
+//        Flux<String> codeStream;
+//        if (agent) {
+//            // Agent 模式：使用工作流生成代码
+//            codeStream = new CodeGenWorkflow().executeWorkflowWithFlux(message, appId);
+//        } else {
+//            // 传统模式：调用 AI 生成代码（流式）
+//            codeStream = aiCodeGeneratorFacade.generateAndSaveCodeStream(message, codeGenTypeEnum, appId);
+//        }
+        Flux<String> codeStream = aiCodeGeneratorFacade.generateAndSaveCodeStream(message, codeGenTypeEnum, appId);
+        // 8.收集AI响应内容并在完成后记录到对话历史
         StringBuilder aiResponseBuilder = new StringBuilder();
 //        return contentFlux
 //                .map(chunk -> {
@@ -189,7 +198,11 @@ public class AppServiceImpl extends ServiceImpl<AppMapper, App> implements AppSe
 //                    String errorMessage = "AI回复失败: " + error.getMessage();
 //                    chatHistoryService.addChatMessage(appId, errorMessage, ChatHistoryMessageTypeEnum.AI.getValue(), loginUser.getId());
 //                });
-        return streamHandlerExecutor.doExecute(codeStream, chatHistoryService, appId, loginUser, codeGenTypeEnum);
+        return streamHandlerExecutor.doExecute(codeStream, chatHistoryService, appId, loginUser, codeGenTypeEnum)
+                .doFinally(signalType -> {
+                    // 流结束时清理（无论成功/失败/取消）
+                    MonitorContextHolder.clearContext();
+                });
     }
 
     /**

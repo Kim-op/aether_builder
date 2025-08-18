@@ -25,21 +25,23 @@
 
 ```json
 {
-  "isValid": true/؜false,
+  "isValid": true/false,
   "errors": [
-    "具体的错误描述1",؜
+    "具体的错误描述1",
     "具体的错误描述2"
   ],
-  "suggestions؜": [
+  "suggestions": [
     "改进建议1",
-    "改进建议؜2"
+    "改进建议2"
   ]
 }
+```
 
 ## 判断标准
-● isValid = true: 代码无严重语法错误，能够正常运行和打包
-● isValid = false: 存在语法错误、结构问题或其他会导致无法正常运行的问题
-● errors: 必须修复的问题，如语法错误、缺失文件等
-● suggestions: 关于如何修复错误和改进代码的建议
+
+- isValid = true: 代码无严重语法错误，能够正常运行和打包
+- isValid = false: 存在语法错误、结构问题或其他会导致无法正常运行的问题
+- errors: 必须修复的问题，如语法错误、缺失文件等
+- suggestions: 关于如何修复错误和改进代码的建议
 
 请仔细分析代码，提供专业的质量检查结果。
