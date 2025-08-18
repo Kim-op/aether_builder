@@ -7,7 +7,7 @@
           <div class="logo-container">
             <img class="logo" src="@/assets/logo.png" alt="Logo" />
           </div>
-          <h1 class="site-title">构建者苏苏</h1>
+          <h1 class="site-title">代码构建者苏苏</h1>
         </div>
       </RouterLink>
 
@@ -357,12 +357,15 @@ const doLogout = async () => {
   transform: translateY(-3px);
 }
 
+/* 用户名样式 */
 .user-name {
   margin-left: 10px;
   font-size: 15px;
-  color: #334155;
+  color: #7d449b;
   transition: color 0.3s ease;
-  font-weight: 500;
+  font-weight: 600;
+  font-family: "Comic Sans MS", "Bubblegum Sans", "Marker Felt", "Arial Rounded MT Bold", sans-serif;
+  -webkit-font-smoothing: antialiased;
 }
 
 .user-info:hover .user-name {
@@ -399,18 +402,25 @@ const doLogout = async () => {
   font-size: 16px;
 }
 
-/* 登录按钮样式 */
+/* 登录按钮样式 - 解决文字居中居中问题 */
 .login-btn {
   background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
   border: none;
   border-radius: 24px;
-  padding: 0 24px;
+  padding: 0 24px; /* 左右内边距保持一致 */
   height: 44px;
   font-size: 15px;
   font-weight: 500;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   box-shadow: 0 4px 15px rgba(59, 130, 246, 0.25);
   color: white;
+
+  /* 确保文字垂直居中 */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1; /* 重置除行高影响 */
+  text-align: center;
 }
 
 .login-btn:hover {
