@@ -1,33 +1,59 @@
 <template>
   <div id="userRegisterPage">
+    <!-- 半透明遮罩层，提升整体可读性 -->
+    <div class="bg-overlay"></div>
+
     <div class="form-container">
-      <h2 class="title">构建者苏苏 - 用户注册</h2>
+      <!-- 品牌标识区域 - 使用指定路径的头像 -->
+      <div class="brand-logo">
+        <div class="logo-container">
+          <!-- 这里可以替换为您指定的头像路径 -->
+          <img :src="avatarPath" alt="代码构建者苏苏Logo" class="logo-image" />
+        </div>
+      </div>
+
+      <h2 class="title">代码构建者苏苏 - 用户注册</h2>
       <div class="desc">不写一行代码，生成完整应用</div>
-      <a-form :model="formState" name="basic" autocomplete="off" @finish="handleSubmit">
-        <a-form-item name="userAccount" :rules="[{ required: true, message: '请输入账号' }]">
-          <a-input v-model:value="formState.userAccount" placeholder="请输入账号" />
+
+      <a-form :model="formState" name="basic" autocomplete="off" @finish="handleSubmit" class="register-form">
+        <a-form-item name="userAccount" :rules="[{ required: true, message: '请输入账号' }]" class="form-item">
+          <a-input v-model:value="formState.userAccount" placeholder="请输入账号" size="large" class="form-input"
+            prefix-icon="user" />
         </a-form-item>
+
         <a-form-item name="userPassword" :rules="[
           { required: true, message: '请输入密码' },
           { min: 8, message: '密码不能小于 8 位' },
-        ]">
-          <a-input-password v-model:value="formState.userPassword" placeholder="请输入密码" />
+        ]" class="form-item">
+          <a-input-password v-model:value="formState.userPassword" placeholder="请输入密码" size="large" class="form-input"
+            prefix-icon="lock" />
         </a-form-item>
+
         <a-form-item name="checkPassword" :rules="[
           { required: true, message: '请确认密码' },
           { min: 8, message: '密码不能小于 8 位' },
           { validator: validateCheckPassword },
-        ]">
-          <a-input-password v-model:value="formState.checkPassword" placeholder="请确认密码" />
+        ]" class="form-item">
+          <a-input-password v-model:value="formState.checkPassword" placeholder="请确认密码" size="large" class="form-input"
+            prefix-icon="check-circle" />
         </a-form-item>
+
         <div class="tips">
           已有账号？
-          <RouterLink to="/user/login">去登录</RouterLink>
+          <RouterLink to="/user/login" class="link">去登录</RouterLink>
         </div>
-        <a-form-item>
-          <a-button type="primary" html-type="submit" style="width: 100%">注册</a-button>
+
+        <a-form-item class="submit-item">
+          <a-button type="primary" html-type="submit" size="large" class="submit-btn">
+            注册
+          </a-button>
         </a-form-item>
       </a-form>
+    </div>
+
+    <!-- 页脚信息 -->
+    <div class="page-footer">
+      <p>© 2025 代码构建者苏苏. 保留所有权利</p>
     </div>
   </div>
 </template>
@@ -36,7 +62,10 @@
 import { useRouter } from 'vue-router'
 import { userRegister } from '@/api/userController.ts'
 import { message } from 'ant-design-vue'
-import { reactive } from 'vue'
+import { reactive, ref } from 'vue'
+
+// 头像路径 - 您可以在这里指定具体的头像路径
+const avatarPath = ref('/src/assets/avatar.png') // 默认路径，可根据需要修改
 
 const router = useRouter()
 
@@ -80,97 +109,215 @@ const handleSubmit = async (values: API.UserRegisterRequest) => {
 </script>
 
 <style scoped>
-/* 设置 html 和 body 元素高度为 100%，确保没有默认边距 */
+/* 基础样式重置与设置 */
 :deep(html),
 :deep(body) {
   height: 100%;
   margin: 0;
   padding: 0;
-  overflow: hidden;
-  /* 防止页面滚动 */
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-/* 外层容器设置，确保覆盖整个页面 */
 :deep(#app) {
   height: 100%;
 }
 
 #userRegisterPage {
-  /* 背景图片设置 - 修正为使用实际存在的 background.png */
-  background-image: url('@/assets/background.png');
-  background-size: cover;
-  /* 覆盖整个容器 */
-  background-position: center;
-  /* 居中显示 */
-  background-repeat: no-repeat;
-  /* 不重复 */
-  background-attachment: fixed;
-  /* 固定背景图片，防止滚动时移动 */
-  height: 100vh;
-  /* 强制覆盖整个视口高度 */
-  width: 100vw;
-  /* 强制覆盖整个视口宽度 */
+  min-height: 100vh;
+  width: 100%;
   display: flex;
-  /* 使用flex布局 */
   flex-direction: column;
-  /* 垂直排列 */
   justify-content: center;
-  /* 垂直居中 */
   align-items: center;
-  /* 水平居中 */
   padding: 24px;
   box-sizing: border-box;
-  /* 确保padding不影响整体尺寸 */
   position: relative;
-  /* 为内容容器提供定位参考 */
+  overflow: hidden;
+
+  /* 保留原始背景图片设置 */
+  background-image: url('@/assets/background.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
 }
 
-/* 表单容器，保持原有样式但增加半透明背景提高可读性 */
-.form-container {
-  background-color: rgba(255, 255, 255, 0.85);
-  /* 白色半透明背景 */
-  max-width: 720px;
+/* 背景遮罩层 - 提升整体可读性 */
+.bg-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
-  padding: 24px;
-  border-radius: 8px;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
-  z-index: 1;
-  /* 确保在背景之上 */
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.2);
+  z-index: 0;
 }
 
+/* 表单容器样式 - 调整为50%透明度 */
+.form-container {
+  background-color: rgba(255, 255, 255, 0.001);
+  /* 50%透明度 */
+  width: 100%;
+  max-width: 420px;
+  padding: 36px 40px;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.25);
+  /* 增强阴影 */
+  z-index: 1;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+  /* 增强模糊效果 */
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  /* 增加边框提升轮廓感 */
+}
+
+.form-container:hover {
+  box-shadow: 0 15px 35px -5px rgba(0, 0, 0, 0.3);
+  transform: translateY(-2px);
+  background-color: rgba(255, 255, 255, 0.55);
+  /*  hover时略微提高不透明度 */
+}
+
+/* 品牌标识样式 - 头像设置 */
+.brand-logo {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 24px;
+}
+
+.logo-container {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  background-color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.logo-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* 标题与描述样式 - 加深颜色确保可读性 */
 .title {
   text-align: center;
-  margin-bottom: 16px;
-  color: #e91e63;
-  /* 玫红色 */
+  margin-bottom: 8px;
+  color: #111;
+  font-size: 24px;
+  font-weight: 600;
+  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
 }
 
 .desc {
   text-align: center;
-  color: #bbb;
-  margin-bottom: 16px;
+  color: #222;
+  margin-bottom: 32px;
+  font-size: 14px;
+  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.8);
 }
 
+/* 表单样式 - 提高输入框不透明度确保内容清晰 */
+.register-form {
+  width: 100%;
+}
+
+.form-item {
+  margin-bottom: 16px !important;
+}
+
+.form-input {
+  border-radius: 8px !important;
+  border-color: rgba(229, 230, 235, 0.9) !important;
+  background-color: rgba(255, 255, 255, 0.9) !important;
+  /* 提高输入框不透明度 */
+  transition: all 0.2s ease !important;
+}
+
+.form-input:focus {
+  border-color: #3b82f6 !important;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2) !important;
+  background-color: rgba(255, 255, 255, 0.95) !important;
+}
+
+/* 提示文字与链接样式 - 加深颜色 */
 .tips {
-  margin-bottom: 16px;
-  color: #bbb;
-  font-size: 13px;
+  margin-bottom: 24px;
+  color: #222;
+  font-size: 14px;
   text-align: right;
+  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.8);
 }
 
-/* 覆盖 Ant Design 按钮的主色调 */
-.ant-btn-primary {
-  background-color: #e91e63 !important;
-  border-color: #e91e63 !important;
+.link {
+  color: #1d4ed8 !important;
+  text-decoration: none !important;
+  font-weight: 600;
+  transition: color 0.2s ease;
 }
 
-.ant-btn-primary:hover {
-  background-color: #d81b60 !important;
-  border-color: #d81b60 !important;
+.link:hover {
+  color: #1e40af !important;
+  text-decoration: underline !important;
 }
 
-/* 链接颜色改为玫红色 */
-.tips a {
-  color: #e91e63 !important;
+/* 提交按钮样式 */
+.submit-item {
+  margin-bottom: 0 !important;
+}
+
+.submit-btn {
+  width: 100% !important;
+  height: 48px !important;
+  font-size: 16px !important;
+  border-radius: 8px !important;
+  background-color: rgba(59, 130, 246, 0.95) !important;
+  /* 提高按钮不透明度 */
+  border-color: rgba(59, 130, 246, 0.95) !important;
+  transition: all 0.2s ease !important;
+}
+
+.submit-btn:hover,
+.submit-btn:focus {
+  background-color: #2563eb !important;
+  border-color: #2563eb !important;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4) !important;
+}
+
+.submit-btn:active {
+  transform: translateY(0);
+}
+
+/* 页脚样式 */
+.page-footer {
+  margin-top: 32px;
+  color: #1a1a1a;
+  font-size: 12px;
+  z-index: 1;
+  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
+}
+
+/* 响应式调整 */
+@media (max-width: 480px) {
+  .form-container {
+    padding: 28px 24px;
+    margin: 0 16px;
+  }
+
+  .title {
+    font-size: 20px;
+  }
+
+  .submit-btn {
+    height: 44px !important;
+    font-size: 15px !important;
+  }
 }
 </style>
