@@ -1,11 +1,14 @@
 package com.aetherbuilder.nocode.langgraph4j;
 
+import cn.hutool.core.date.StopWatch;
 import com.aetherbuilder.nocode.langgraph4j.state.WorkflowContext;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
+@Slf4j
 class CodeGenWorkflowTest {
 
     @Test
@@ -19,11 +22,20 @@ class CodeGenWorkflowTest {
 
     @Test
     void testCorporateWorkflow() {
+
+        // 开头计时
+        StopWatch stopWatch = new StopWatch();
+        stopWatch.start();
+
         WorkflowContext result = new CodeGenWorkflow().executeWorkflow("创建企业官网，展示公司形象和业务介绍");
         Assertions.assertNotNull(result);
         System.out.println("生成类型: " + result.getGenerationType());
         System.out.println("生成的代码目录: " + result.getGeneratedCodeDir());
         System.out.println("构建结果目录: " + result.getBuildResultDir());
+
+        // 结尾停止计时并输出结果
+        stopWatch.stop();
+        log.info("图片收集总耗时: {} ms", stopWatch.getTotalTimeMillis());
     }
 
     @Test
