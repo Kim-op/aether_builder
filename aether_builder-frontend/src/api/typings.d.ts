@@ -133,17 +133,24 @@ declare namespace API {
     lastCreateTime?: string
   }
 
-  type chatToGenCodeParams = {
-    appId: number
-    message: string
-  }
-
   type DeleteRequest = {
     id?: number
   }
 
   type downloadAppCodeParams = {
     appId: number
+  }
+
+  type executeWorkflowParams = {
+    prompt: string
+  }
+
+  type executeWorkflowWithFluxParams = {
+    prompt: string
+  }
+
+  type executeWorkflowWithSseParams = {
+    prompt: string
   }
 
   type getAppVOByIdByAdminParams = {
@@ -164,6 +171,12 @@ declare namespace API {
 
   type getUserVOByIdParams = {
     id: number
+  }
+
+  type ImageResource = {
+    category?: 'CONTENT' | 'LOGO' | 'ILLUSTRATION' | 'ARCHITECTURE'
+    description?: string
+    url?: string
   }
 
   type listAppChatHistoryParams = {
@@ -223,14 +236,22 @@ declare namespace API {
     optimizeCountQuery?: boolean
   }
 
+  type QualityResult = {
+    isValid?: boolean
+    errors?: string[]
+    suggestions?: string[]
+  }
+
   type removeParams = {
     id: number
   }
 
-  type ServerSentEventString = true
-
   type serveStaticResourceParams = {
     deployKey: string
+  }
+
+  type SseEmitter = {
+    timeout?: number
   }
 
   type User = {
@@ -294,5 +315,19 @@ declare namespace API {
     userProfile?: string
     userRole?: string
     createTime?: string
+  }
+
+  type WorkflowContext = {
+    currentStep?: string
+    originalPrompt?: string
+    imageListStr?: string
+    imageList?: ImageResource[]
+    enhancedPrompt?: string
+    generationType?: 'HTML' | 'MULTI_FILE' | 'VUE_PROJECT'
+    generatedCodeDir?: string
+    buildResultDir?: string
+    errorMessage?: string
+    qualityResult?: QualityResult
+    appId?: number
   }
 }

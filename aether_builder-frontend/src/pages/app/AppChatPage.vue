@@ -438,6 +438,7 @@ const generateCode = async (userMessage: string, aiMessageIndex: number) => {
     const params = new URLSearchParams({
       appId: appId.value || '',
       message: userMessage,
+      agent: "true",
     })
 
     const url = `${baseURL}/app/chat/gen/code?${params}`

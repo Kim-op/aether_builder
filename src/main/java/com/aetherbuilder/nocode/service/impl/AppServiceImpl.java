@@ -14,6 +14,7 @@ import com.aetherbuilder.nocode.core.handler.StreamHandlerExecutor;
 import com.aetherbuilder.nocode.exception.BusinessException;
 import com.aetherbuilder.nocode.exception.ErrorCode;
 import com.aetherbuilder.nocode.exception.ThrowUtils;
+import com.aetherbuilder.nocode.langgraph4j.CodeGenWorkflow;
 import com.aetherbuilder.nocode.mapper.AppMapper;
 import com.aetherbuilder.nocode.model.dto.app.AppAddRequest;
 import com.aetherbuilder.nocode.model.dto.app.AppQueryRequest;
@@ -135,7 +136,7 @@ public class AppServiceImpl extends ServiceImpl<AppMapper, App> implements AppSe
      * @return
      */
     @Override
-    public Flux<String> chatToGenCode(Long appId, String message, User loginUser) {
+    public Flux<String> chatToGenCode(Long appId, String message, User loginUser, boolean agent) {
         // 1.参数校验
         ThrowUtils.throwIf(null == appId || appId <= 0, ErrorCode.PARAMS_ERROR, "应用ID为空");
         ThrowUtils.throwIf(StrUtil.isBlank(message), ErrorCode.PARAMS_ERROR, "消息为空");
@@ -157,7 +158,16 @@ public class AppServiceImpl extends ServiceImpl<AppMapper, App> implements AppSe
                 loginUser.getId());
         // 6.调用AI代码生成器
 //        Flux<String> contentFlux = aiCodeGeneratorFacade.generateAndSaveCodeStream(message, codeGenTypeEnum, appId);
-        Flux<String> codeStream = aiCodeGeneratorFacade.generateAndSaveCodeStream(message, codeGenTypeEnum, appId);
+//        Flux<String> codeStream = aiCodeGeneratorFacade.generateAndSaveCodeStream(message, codeGenTypeEnum, appId);
+        // 6. 根据 agent 参数选择生成方式
+        Flux<String> codeStream;
+        if (agent) {
+            // Agent 模式：使用工作流生成代码
+            codeStream = new CodeGenWorkflow().executeWorkflowWithFlux(message, appId);
+        } else {
+            // 传统模式：调用 AI 生成代码（流式）
+            codeStream = aiCodeGeneratorFacade.generateAndSaveCodeStream(message, codeGenTypeEnum, appId);
+        }
         // 7.收集AI响应内容并在完成后记录到对话历史
         StringBuilder aiResponseBuilder = new StringBuilder();
 //        return contentFlux
@@ -323,4 +333,5 @@ public class AppServiceImpl extends ServiceImpl<AppMapper, App> implements AppSe
         log.info("应用创建成功，ID: {}, 类型: {}", app.getId(), selectedCodeGenType.getValue());
         return app.getId();
     }
+
 }

@@ -125,16 +125,24 @@ public class CodeGenWorkflow {
         // VUE_PROJECT 需要构建
         return "build";
     }
-
     /**
      * 执行工作流（Flux 流式输出版本）
      */
     public Flux<String> executeWorkflowWithFlux(String originalPrompt) {
+        return executeWorkflowWithFlux(originalPrompt, 0L);
+    }
+
+
+    /**
+     * 执行工作流（Flux 流式输出版本）
+     */
+    public Flux<String> executeWorkflowWithFlux(String originalPrompt, Long appId) {
         return Flux.create(sink -> {
             Thread.startVirtualThread(() -> {
                 try {
                     CompiledGraph<MessagesState<String>> workflow = createWorkflow();
                     WorkflowContext initialContext = WorkflowContext.builder()
+                            .appId(appId)
                             .originalPrompt(originalPrompt)
                             .currentStep("初始化")
                             .build();

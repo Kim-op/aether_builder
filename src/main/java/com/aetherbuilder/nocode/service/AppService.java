@@ -41,13 +41,15 @@ public interface AppService extends IService<App> {
     QueryWrapper getQueryWrapper(AppQueryRequest appQueryRequest);
 
     /**
-     * 调用 AI 生成代码
+     * 应用聊天生成代码（流式）
      *
-     * @param appId
-     * @param message
-     * @return
+     * @param appId   应用 ID
+     * @param message 用户消息
+     * @param loginUser 登录用户
+     * @param agent 是否启用 Agent 模式
+     * @return 生成的代码流
      */
-    Flux<String> chatToGenCode(Long appId, String message, User loginUser);
+    Flux<String> chatToGenCode(Long appId, String message, User loginUser, boolean agent);
 
     /**
      * 应用部署
@@ -72,4 +74,5 @@ public interface AppService extends IService<App> {
      * @return
      */
     Long createApp(AppAddRequest appAddRequest, User loginUser);
+
 }
