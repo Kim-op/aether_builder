@@ -66,7 +66,7 @@
                 查看对话
               </a-button>
               <a-popconfirm title="确定要删除这条消息吗？" @confirm="deleteMessage(record.id)" ok-text="确认" cancel-text="取消">
-                <a-button danger size="small" class="delete-btn" slot="reference">
+                <a-button danger size="small" class="delete-btn" slot="reference" disabled>
                   <DeleteOutlined class="btn-icon" />
                   删除
                 </a-button>
