@@ -164,6 +164,6 @@ aether_builder/
 
 ## 联系我们
 
-- 官方网站: [https://aetherbuilder.com](https://aetherbuilder.com)
-- 邮箱: support@aetherbuilder.com
-- GitHub: [https://github.com/your-org/aether_builder](https://github.com/your-org/aether_builder)
+- 官方网站: 
+- 邮箱: Agoni437@163.com
+- GitHub: [https://github.com/Kim-op/aether_builder](https://github.com/Kim-op/aether_builder)
