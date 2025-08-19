@@ -2,6 +2,8 @@
 
 Aether Builder 是一个功能强大的 AI 代码生成平台，旨在通过人工智能技术帮助开发者快速构建、编辑和部署应用程序。平台集成了先进的大语言模型和可视化编辑工具，让开发过程变得更加高效和直观。
 
+![img.png](assets/img_8.png)
+![img_1.png](assets/img_9.png)
 ![img.png](assets/img.png)
 ![img_1.png](assets/img_1.png)
 ![img_2.png](assets/img_2.png)
