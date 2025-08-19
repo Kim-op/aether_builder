@@ -7,7 +7,7 @@
           <div class="logo-container">
             <img class="logo" src="@/assets/logo.png" alt="Logo" />
           </div>
-          <h1 class="site-title">代码构建者苏苏</h1>
+          <h1 class="site-title">构建者苏苏</h1>
         </div>
       </RouterLink>
 
