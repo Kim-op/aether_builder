@@ -3,7 +3,7 @@ package com.aetherbuilder.nocode.design.parser;
 /**
  * 代码解析器策略接口
  * 
- * @author yupi
+ * @author cammy
  */
 public interface CodeParser<T> {
 

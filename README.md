@@ -172,5 +172,5 @@ aether_builder/
 
 ps:
 这是苏苏
-![img.png](susu01.png)
-![img_1.png](susu02.png)
+![img.png](assets/susu01.png)
+![img_1.png](assets/susu02.png)
